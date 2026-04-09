@@ -223,7 +223,7 @@ export default function CustomerPage() {
                 <select
                   value={serviceType}
                   onChange={(e) => setServiceType(e.target.value)}
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none focus:border-sky-400/50"
+                  className="themed-select w-full rounded-2xl border border-white/10 px-4 py-3 text-white outline-none focus:border-sky-400/50"
                 >
                   <option value="GENERAL">General enquiry</option>
                   <option value="ACCOUNT">Account services</option>
@@ -247,7 +247,7 @@ export default function CustomerPage() {
                   <select
                     value={priorityLevel}
                     onChange={(e) => setPriorityLevel(e.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none focus:border-sky-400/50"
+                    className="themed-select w-full rounded-2xl border border-white/10 px-4 py-3 text-white outline-none focus:border-sky-400/50"
                   >
                     <option value="SENIOR_CITIZEN">Senior citizen</option>
                     <option value="EMERGENCY">Emergency</option>
@@ -325,7 +325,7 @@ export default function CustomerPage() {
                         <select
                           value={draft.rating}
                           onChange={(event) => updateFeedbackDraft(token.id, 'rating', event.target.value)}
-                          className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none focus:border-sky-400/50"
+                          className="themed-select rounded-2xl border border-white/10 px-4 py-3 text-white outline-none focus:border-sky-400/50"
                         >
                           {[5, 4, 3, 2, 1].map((rating) => (
                             <option key={rating} value={rating}>

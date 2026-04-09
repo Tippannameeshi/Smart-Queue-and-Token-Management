@@ -44,4 +44,27 @@
     font-family: Georgia, "Times New Roman", serif;
     letter-spacing: -0.025em;
   }
-}
+
+  .themed-select {
+    appearance: none;
+    background-color: rgba(2, 6, 23, 0.72);
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      box-shadow 160ms ease;
+  }
+
+  .themed-select:hover {
+    background-color: rgba(15, 23, 42, 0.9);
+  }
+
+  .themed-select:focus {
+    background-color: rgba(15, 23, 42, 0.96);
+    box-shadow: 0 0 0 1px rgba(251, 191, 36, 0.18);
+  }
+
+  .themed-select option {
+    background-color: #0f172a;
+    color: #f8fafc;
+  }
+  }

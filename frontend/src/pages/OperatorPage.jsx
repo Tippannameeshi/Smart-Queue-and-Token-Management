@@ -153,7 +153,7 @@ export default function OperatorPage() {
               <select
                 value={selectedCounter}
                 onChange={(e) => setSelectedCounter(Number(e.target.value))}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none focus:border-emerald-400/50"
+                className="themed-select w-full rounded-2xl border border-white/10 px-4 py-3 text-white outline-none focus:border-emerald-400/50"
               >
                 {counters.map((counter) => (
                   <option key={counter.id} value={counter.id}>

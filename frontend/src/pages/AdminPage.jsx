@@ -98,6 +98,11 @@ export default function AdminPage() {
   };
 
   const handleRoleChange = async (userId, nextRole) => {
+    if (userId === user?.id) {
+      setError('Your own admin role cannot be changed from this dashboard.');
+      return;
+    }
+
     setBusyUserId(userId);
     setMessage('');
     setError('');
@@ -319,7 +324,7 @@ export default function AdminPage() {
                 <select
                   value={form.role}
                   onChange={(event) => setForm((current) => ({ ...current, role: event.target.value }))}
-                  className="w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition focus:border-amber-400/50"
+                  className="themed-select w-full rounded-2xl border border-white/10 px-4 py-3 text-white outline-none focus:border-amber-400/50"
                 >
                   {ROLE_OPTIONS.map((role) => (
                     <option key={role} value={role}>
@@ -392,8 +397,8 @@ export default function AdminPage() {
                       <select
                         value={account.role}
                         onChange={(event) => handleRoleChange(account.id, event.target.value)}
-                        disabled={busyUserId === account.id}
-                        className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition focus:border-amber-400/50 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={busyUserId === account.id || account.id === user?.id}
+                        className="themed-select rounded-2xl border border-white/10 px-4 py-3 text-sm text-white outline-none transition focus:border-amber-400/50 disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {ROLE_OPTIONS.map((role) => (
                           <option key={role} value={role}>
@@ -421,6 +426,11 @@ export default function AdminPage() {
                     {account.id === user?.id ? (
                       <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1 text-amber-100">
                         Current session
+                      </span>
+                    ) : null}
+                    {account.id === user?.id ? (
+                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-slate-200">
+                        Role locked
                       </span>
                     ) : null}
                   </div>
@@ -462,7 +472,7 @@ export default function AdminPage() {
               <select
                 value={counterForm.status}
                 onChange={(event) => setCounterForm((current) => ({ ...current, status: event.target.value }))}
-                className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-white outline-none transition focus:border-amber-400/50"
+                className="themed-select rounded-2xl border border-white/10 px-4 py-3 text-white outline-none transition focus:border-amber-400/50"
               >
                 {COUNTER_STATUS_OPTIONS.map((status) => (
                   <option key={status} value={status}>
@@ -548,7 +558,7 @@ export default function AdminPage() {
                         status: event.target.value,
                         active: counter.active
                       })}
-                      className="rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-white outline-none transition focus:border-amber-400/50"
+                      className="themed-select rounded-2xl border border-white/10 px-4 py-3 text-sm text-white outline-none transition focus:border-amber-400/50"
                     >
                       {COUNTER_STATUS_OPTIONS.map((status) => (
                         <option key={status} value={status}>

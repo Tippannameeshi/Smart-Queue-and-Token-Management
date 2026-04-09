@@ -6,6 +6,7 @@ import com.smartqueue.dto.UserResponseDTO;
 import com.smartqueue.service.UserService;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,13 +38,17 @@ public class UserController {
     }
 
     @PatchMapping("/{id}/role")
-    public ResponseEntity<UserResponseDTO> updateRole(@PathVariable Long id, @Valid @RequestBody UpdateUserRoleRequest request) {
-        return ResponseEntity.ok(userService.updateUserRole(id, request.getRole()));
+    public ResponseEntity<UserResponseDTO> updateRole(
+        @PathVariable Long id,
+        @Valid @RequestBody UpdateUserRoleRequest request,
+        Principal principal
+    ) {
+        return ResponseEntity.ok(userService.updateUserRole(id, request.getRole(), principal.getName()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id, Principal principal) {
+        userService.deleteUser(id, principal.getName());
         return ResponseEntity.noContent().build();
     }
 }

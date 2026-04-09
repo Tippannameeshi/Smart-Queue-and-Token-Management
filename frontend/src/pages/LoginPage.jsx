@@ -76,23 +76,31 @@ export default function LoginPage() {
     }
   ];
 
+  const quickFacts = [
+    { value: '4 roles', label: 'Customer to admin access' },
+    { value: 'Live flow', label: 'Queue refresh across dashboards' },
+    { value: 'Fast setup', label: 'New customers can register instantly' }
+  ];
+
   return (
     <div className="app-shell min-h-screen px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-7xl gap-6 lg:grid-cols-[1.15fr_0.85fr]">
         <section className="glass-panel relative overflow-hidden rounded-[32px] border border-white/10 p-8 sm:p-10">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(245,158,11,0.14),transparent_34%)]" />
-          <div className="relative">
+          <div className="relative flex h-full flex-col justify-between">
             <div className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-sky-200">
               <ShieldCheck className="h-4 w-4" />
               Queue Automation Platform
             </div>
 
-            <h1 className="mt-6 max-w-3xl font-heading text-4xl leading-tight text-white sm:text-5xl">
-              Smart queue management for banks, hospitals, colleges, and public service desks.
-            </h1>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
-              Sign in with an existing account or create a new customer account using any email ID.
-            </p>
+            <div className="mt-8">
+              <h1 className="max-w-3xl font-heading text-4xl leading-tight text-white sm:text-5xl">
+                Smart queue management for banks, hospitals, colleges, and public service desks.
+              </h1>
+              <p className="mt-5 max-w-2xl text-base leading-7 text-slate-300">
+                Sign in with an existing account or create a new customer account using any email ID.
+              </p>
+            </div>
 
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               {highlights.map((item) => (
@@ -104,29 +112,23 @@ export default function LoginPage() {
               ))}
             </div>
 
-            <div className="mt-10 rounded-[28px] border border-white/10 bg-slate-950/60 p-6">
-              <div className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-400">Ready-to-use demo accounts</div>
-              <div className="mt-2 text-sm text-slate-300">
-                You can still use the seeded accounts below, but they are no longer required.
-              </div>
-              <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                {[
-                  'customer@sq.com / cust123',
-                  'op1@sq.com / op123',
-                  'mgr@sq.com / mgr123',
-                  'admin@sq.com / admin123'
-                ].map((account) => (
-                  <div key={account} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
-                    {account}
-                  </div>
-                ))}
-              </div>
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              {quickFacts.map((fact) => (
+                <div key={fact.label} className="rounded-[24px] border border-white/10 bg-slate-950/45 px-5 py-4">
+                  <div className="text-2xl font-semibold text-white">{fact.value}</div>
+                  <div className="mt-1 text-sm text-slate-400">{fact.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-[28px] border border-white/10 bg-white/[0.04] px-5 py-4 text-sm leading-6 text-slate-300">
+              A cleaner sign-in experience keeps the focus on secure access while new customers can still create an account in seconds.
             </div>
           </div>
         </section>
 
         <section className="glass-panel flex items-center rounded-[32px] border border-white/10 p-6 sm:p-8">
-          <div className="w-full">
+          <div className="w-full rounded-[28px] border border-white/10 bg-slate-950/35 p-5 sm:p-6">
             <div className="flex rounded-2xl border border-white/10 bg-slate-950/60 p-1">
               <button
                 type="button"
@@ -135,7 +137,7 @@ export default function LoginPage() {
                   setError('');
                 }}
                 className={`flex-1 rounded-[14px] px-4 py-2 text-sm font-semibold transition ${
-                  mode === 'login' ? 'bg-sky-400 text-slate-950' : 'text-slate-300'
+                  mode === 'login' ? 'bg-sky-400 text-slate-950 shadow-[0_10px_30px_rgba(56,189,248,0.18)]' : 'text-slate-300 hover:bg-white/5'
                 }`}
               >
                 Sign in
@@ -147,7 +149,7 @@ export default function LoginPage() {
                   setError('');
                 }}
                 className={`flex-1 rounded-[14px] px-4 py-2 text-sm font-semibold transition ${
-                  mode === 'register' ? 'bg-emerald-400 text-slate-950' : 'text-slate-300'
+                  mode === 'register' ? 'bg-emerald-400 text-slate-950 shadow-[0_10px_30px_rgba(52,211,153,0.16)]' : 'text-slate-300 hover:bg-white/5'
                 }`}
               >
                 Create account

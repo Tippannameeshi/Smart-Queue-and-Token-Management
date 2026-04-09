@@ -68,14 +68,20 @@ public class UserService {
         return UserResponseDTO.from(userRepository.save(user));
     }
 
-    public UserResponseDTO updateUserRole(Long userId, UserRole role) {
+    public UserResponseDTO updateUserRole(Long userId, UserRole role, String currentUserEmail) {
         User user = getUserById(userId);
+        if (user.getEmail().equalsIgnoreCase(currentUserEmail)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your own admin role cannot be changed");
+        }
         user.setRole(role);
         return UserResponseDTO.from(userRepository.save(user));
     }
 
-    public void deleteUser(Long userId) {
+    public void deleteUser(Long userId, String currentUserEmail) {
         User user = getUserById(userId);
+        if (user.getEmail().equalsIgnoreCase(currentUserEmail)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your own admin account cannot be deleted");
+        }
         userRepository.delete(user);
     }
 
