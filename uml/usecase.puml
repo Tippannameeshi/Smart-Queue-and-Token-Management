@@ -1,0 +1,53 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+
+actor Customer
+actor Operator
+actor Manager
+actor Administrator
+
+rectangle "Smart Queue System" {
+  usecase "Generate Token" as UC1
+  usecase "View Token Status" as UC2
+  usecase "View Queue Position" as UC3
+  usecase "Submit Feedback" as UC4
+  usecase "View Assigned Tokens" as UC5
+  usecase "Call Next Token" as UC6
+  usecase "Update Token Status" as UC7
+  usecase "Skip Token" as UC8
+  usecase "Monitor Queue" as UC9
+  usecase "Configure Priority" as UC10
+  usecase "View Reports" as UC11
+  usecase "Manage Users" as UC12
+  usecase "Manage Counters" as UC13
+  usecase "Generate Analytics" as UC14
+  usecase "Authenticate" as UC15
+}
+
+Customer --> UC1
+Customer --> UC2
+Customer --> UC3
+Customer --> UC4
+Customer --> UC15
+
+Operator --> UC5
+Operator --> UC6
+Operator --> UC7
+Operator --> UC8
+Operator --> UC15
+
+Manager --> UC9
+Manager --> UC10
+Manager --> UC11
+Manager --> UC15
+
+Administrator --> UC12
+Administrator --> UC13
+Administrator --> UC14
+Administrator --> UC15
+
+UC1 ..> UC15 : <<include>>
+UC5 ..> UC15 : <<include>>
+UC11 ..> UC14 : <<extend>>
+@enduml

@@ -1,0 +1,1 @@
+export const COUNTER_STATUS_OPTIONS = ['OPEN', 'CLOSED'];

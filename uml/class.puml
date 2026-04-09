@@ -1,0 +1,112 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+abstract class User {
+  - Long id
+  - String name
+  - String email
+  - String password
+  - UserRole role
+  + {abstract} getPermissionLevel() : String
+}
+
+class Customer {
+  + List~Token~ tokens
+  + getPermissionLevel() : String
+}
+
+class Operator {
+  + ServiceCounter assignedCounter
+  + getPermissionLevel() : String
+}
+
+class Manager {
+  + getPermissionLevel() : String
+}
+
+class Admin {
+  + getPermissionLevel() : String
+}
+
+User <|-- Customer
+User <|-- Operator
+User <|-- Manager
+User <|-- Admin
+
+abstract class Token {
+  - Long id
+  - String tokenNumber
+  - TokenStatus status
+  - LocalDateTime generatedAt
+  - int waitingPosition
+  + {abstract} getPriorityScore() : int
+  + {abstract} getTokenPrefix() : String
+}
+
+class RegularToken {
+  + getPriorityScore() : int
+  + getTokenPrefix() : String
+}
+
+class PriorityToken {
+  - PriorityLevel priorityLevel
+  + getPriorityScore() : int
+  + getTokenPrefix() : String
+}
+
+Token <|-- RegularToken
+Token <|-- PriorityToken
+
+class ServiceCounter {
+  - Long id
+  - int counterNumber
+  - String counterName
+  - boolean isActive
+  - CounterStatus status
+}
+
+class Feedback {
+  - Long id
+  - int rating
+  - String comment
+  - LocalDateTime submittedAt
+}
+
+interface QueueStrategy {
+  + orderTokens(List~Token~) : List~Token~
+  + getStrategyName() : String
+}
+
+class RegularQueueStrategy {
+  + orderTokens(List~Token~) : List~Token~
+  + getStrategyName() : String
+}
+
+class PriorityQueueStrategy {
+  + orderTokens(List~Token~) : List~Token~
+  + getStrategyName() : String
+}
+
+QueueStrategy <|.. RegularQueueStrategy
+QueueStrategy <|.. PriorityQueueStrategy
+
+interface TokenObserver {
+  + onTokenStatusChanged(Token) : void
+}
+
+class NotificationService {
+  + onTokenStatusChanged(Token) : void
+  + notifyTokenCalled(Token) : void
+}
+
+TokenObserver <|.. NotificationService
+
+class TokenFactory {
+  + createToken(String, PriorityLevel) : Token
+}
+
+Customer "1" --> "many" Token : generates
+ServiceCounter "1" --> "many" Token : serves
+Token "1" --> "1" Feedback : has
+TokenFactory ..> Token : creates
+@enduml

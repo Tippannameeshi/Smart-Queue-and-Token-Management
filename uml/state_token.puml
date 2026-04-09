@@ -1,0 +1,25 @@
+@startuml
+[*] --> GENERATED : Customer requests token
+
+GENERATED --> WAITING : Token placed in queue
+WAITING --> CALLED : Operator calls token
+WAITING --> SKIPPED : No response
+
+CALLED --> IN_SERVICE : Customer arrives
+CALLED --> SKIPPED : Customer absent
+
+IN_SERVICE --> COMPLETED : Service delivered
+
+COMPLETED --> [*]
+SKIPPED --> [*]
+
+note right of WAITING
+  Priority score
+  determines position
+end note
+
+note right of IN_SERVICE
+  Timer tracks
+  service duration
+end note
+@enduml

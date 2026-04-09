@@ -1,0 +1,27 @@
+@startuml
+|Customer|
+start
+:Login to system;
+:Select service type;
+:Choose token type;
+
+if (Priority token?) then (yes)
+  :Select priority reason;
+endif
+
+:Click Generate Token;
+
+|System|
+:Validate customer;
+:Call TokenFactory.createToken();
+:Assign token number;
+:Set status = WAITING;
+:Calculate queue position;
+:Save to database;
+:Notify customer;
+
+|Customer|
+:Receive token number;
+:Monitor queue position;
+stop
+@enduml

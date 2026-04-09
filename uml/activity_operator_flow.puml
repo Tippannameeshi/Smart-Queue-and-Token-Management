@@ -1,0 +1,31 @@
+@startuml
+|Operator|
+start
+:Login to system;
+:Open Counter Dashboard;
+:View assigned queue;
+
+repeat
+
+  :Click Call Next;
+
+  |System|
+  :Apply QueueStrategy;
+  :Get next token;
+  :Set status = CALLED;
+  :Notify customer;
+
+  |Operator|
+  if (Customer arrives?) then (yes)
+    :Set status = IN_SERVICE;
+    :Provide service;
+    :Set status = COMPLETED;
+  else (no)
+    :Set status = SKIPPED;
+  endif
+
+repeat while (Queue not empty?)
+
+:Close counter;
+stop
+@enduml

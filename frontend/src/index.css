@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(14, 165, 233, 0.16), transparent 28%),
+      radial-gradient(circle at right 20%, rgba(245, 158, 11, 0.1), transparent 24%),
+      linear-gradient(180deg, #07111f 0%, #08111b 45%, #050912 100%);
+    background-color: #050912;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+    color: #e2e8f0;
+    background: transparent;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .app-shell {
+    background:
+      radial-gradient(circle at top left, rgba(56, 189, 248, 0.08), transparent 26%),
+      radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.08), transparent 24%),
+      linear-gradient(180deg, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.98));
+  }
+
+  .glass-panel {
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.76), rgba(15, 23, 42, 0.54));
+    backdrop-filter: blur(18px);
+    box-shadow: 0 22px 60px rgba(2, 6, 23, 0.28);
+  }
+
+  .font-heading {
+    font-family: Georgia, "Times New Roman", serif;
+    letter-spacing: -0.025em;
+  }
+}

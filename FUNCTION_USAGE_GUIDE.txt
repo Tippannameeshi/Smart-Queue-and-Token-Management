@@ -1,0 +1,479 @@
+SMART QUEUE & TOKEN MANAGEMENT SYSTEM
+FUNCTION USAGE GUIDE
+
+This file explains how to use the major system functions in the project.
+
+==================================================
+1. LOGIN AND REGISTRATION FUNCTIONS
+==================================================
+
+Frontend service:
+authService.login(credentials)
+- File: frontend/src/services/authService.js
+- Purpose: Log in an existing user
+- Input:
+  {
+    email: "user@example.com",
+    password: "yourPassword"
+  }
+- Backend endpoint used:
+  POST /api/auth/login
+- Result:
+  Returns JWT token and logged-in user details
+
+authService.register(data)
+- File: frontend/src/services/authService.js
+- Purpose: Register a new customer account
+- Input:
+  {
+    name: "Your Name",
+    email: "yourmail@example.com",
+    phone: "9999999999",
+    password: "yourPassword"
+  }
+- Backend endpoint used:
+  POST /api/auth/register/customer
+- Result:
+  Creates a new customer and logs the user in immediately
+
+authService.logout()
+- Purpose: Remove local JWT token from browser storage
+
+UI usage:
+- Open the login page
+- Use "Sign in" for existing accounts
+- Use "Create account" to register with any email ID
+
+==================================================
+2. CUSTOMER FUNCTIONS
+==================================================
+
+Customer dashboard page:
+frontend/src/pages/CustomerPage.jsx
+
+Available customer actions:
+
+1. Generate token
+- Select service type:
+  GENERAL
+  ACCOUNT
+  LOAN
+- Optional:
+  enable priority token
+- If priority is enabled, choose:
+  SENIOR_CITIZEN
+  EMERGENCY
+  DIFFERENTLY_ABLED
+- Click "Generate token"
+
+Frontend function:
+tokenService.generateToken(data)
+
+Input example:
+{
+  customerId: 5,
+  serviceType: "GENERAL",
+  tokenType: "REGULAR",
+  priorityLevel: "REGULAR"
+}
+
+Priority example:
+{
+  customerId: 5,
+  serviceType: "ACCOUNT",
+  tokenType: "PRIORITY",
+  priorityLevel: "SENIOR_CITIZEN"
+}
+
+Backend endpoint:
+POST /api/tokens/generate
+
+2. View my tokens
+Frontend function:
+tokenService.getMyTokens()
+
+Example:
+tokenService.getMyTokens()
+
+Backend endpoint:
+GET /api/tokens/my
+
+Important:
+- Customers only receive their own tokens
+- Queue position is now refreshed dynamically based on current priority ordering
+- Token details include service type, priority level, assigned counter, notification message, and feedback eligibility
+
+3. Check token status by token number
+Frontend function:
+tokenService.getTokenStatus(num)
+
+Example:
+tokenService.getTokenStatus("R-001")
+
+Backend endpoint:
+GET /api/tokens/status/R-001
+
+Important:
+- Customers can check only their own token numbers
+- Operators, managers, and admins can check any token
+
+4. Submit feedback after completion
+Frontend function:
+tokenService.submitFeedback(data)
+
+Example:
+{
+  tokenId: 12,
+  rating: 5,
+  comment: "Service completed quickly"
+}
+
+Backend endpoint:
+POST /api/feedback
+
+Rules:
+- Feedback is allowed only for COMPLETED tokens
+- A customer can submit feedback only once per completed token
+- A customer can submit feedback only for their own token
+
+==================================================
+3. OPERATOR FUNCTIONS
+==================================================
+
+Operator dashboard page:
+frontend/src/pages/OperatorPage.jsx
+
+Main operator actions:
+
+1. View current queue
+Frontend function:
+tokenService.getQueue()
+
+Backend endpoint:
+GET /api/tokens/queue
+
+2. View counters
+Frontend function:
+reportService.getCounters()
+
+Backend endpoint:
+GET /api/counters
+
+3. Call next token
+- Select a counter
+- Click "Call next token"
+
+Frontend function:
+tokenService.callNext(counterId)
+
+Example:
+tokenService.callNext(1)
+
+Backend endpoint:
+POST /api/tokens/call-next/1
+
+4. Update token status
+Frontend function:
+tokenService.updateStatus(id, status)
+
+Examples:
+tokenService.updateStatus(12, "IN_SERVICE")
+tokenService.updateStatus(12, "COMPLETED")
+
+Backend endpoint:
+PATCH /api/tokens/{id}/status
+
+Request body example:
+{
+  "status": "IN_SERVICE"
+}
+
+5. Skip token
+Frontend function:
+tokenService.skipToken(id)
+
+Example:
+tokenService.skipToken(12)
+
+Backend endpoint:
+PATCH /api/tokens/12/skip
+
+Important operator rules:
+- A counter must be OPEN and active before calling the next token
+- A new token cannot be called while the current token at that counter is still active
+- Operators now handle the token assigned to their counter directly
+- Token lifecycle is enforced as:
+  WAITING -> CALLED -> IN_SERVICE -> COMPLETED
+  WAITING/CALLED -> SKIPPED
+
+==================================================
+4. MANAGER FUNCTIONS
+==================================================
+
+Manager dashboard page:
+frontend/src/pages/ManagerPage.jsx
+
+Available manager actions:
+
+1. View queue analytics
+Frontend function:
+reportService.getQueueStats()
+
+Backend endpoint:
+GET /api/reports/queue-stats
+
+Returned fields include:
+- totalTokens
+- waitingTokens
+- calledTokens
+- inServiceTokens
+- completedTokens
+- skippedTokens
+- priorityTokens
+- totalUsers
+- activeCounters
+- totalCounters
+
+2. View queue list
+Frontend function:
+tokenService.getQueue()
+
+3. View all counters
+Frontend function:
+reportService.getCounters()
+
+Current note:
+- Manager monitoring is implemented
+- Manager priority rule editing is not implemented yet
+- Dashboard refreshes automatically for near real-time monitoring
+
+==================================================
+5. ADMIN FUNCTIONS
+==================================================
+
+Admin dashboard page:
+frontend/src/pages/AdminPage.jsx
+
+Available admin actions:
+
+1. View all users
+Frontend function:
+reportService.getAllUsers()
+
+Backend endpoint:
+GET /api/users
+
+2. View all counters
+Frontend function:
+reportService.getCounters()
+
+Backend endpoint:
+GET /api/counters
+
+3. View queue stats
+Frontend function:
+reportService.getQueueStats()
+
+Backend endpoint:
+GET /api/reports/queue-stats
+
+Additional admin counter functions:
+
+4. Create counter
+Frontend function:
+counterService.createCounter(data)
+
+Backend endpoint:
+POST /api/counters
+
+5. Update counter
+Frontend function:
+counterService.updateCounter(id, data)
+
+Backend endpoint:
+PATCH /api/counters/{id}
+
+6. Delete counter
+Frontend function:
+counterService.deleteCounter(id)
+
+Backend endpoint:
+DELETE /api/counters/{id}
+
+Current note:
+- Admin user CRUD is implemented
+- Admin counter CRUD is implemented
+- Elevated actions remain protected by role-based access control
+
+==================================================
+6. COMPLETE WORKFLOW SIMULATION
+==================================================
+
+This project now supports the full workflow requested across all roles:
+
+1. Customer generates multiple tokens
+- Regular or priority token
+- Service types: GENERAL, ACCOUNT, LOAN
+- Priority levels: SENIOR_CITIZEN, EMERGENCY, DIFFERENTLY_ABLED
+
+2. Tokens enter waiting queue
+- Queue is ordered by priority first, then generation time
+- Waiting position updates dynamically
+
+3. Operator calls next token
+- Token moves to CALLED
+- Counter assignment is stored
+- Customer notification message is generated
+
+4. Operator starts service
+- Token moves from CALLED to IN_SERVICE
+
+5. Operator completes or skips token
+- IN_SERVICE -> COMPLETED
+- WAITING/CALLED -> SKIPPED
+- Counter is released automatically when service ends or token is skipped
+
+6. Customer tracks updates
+- View only own tokens
+- See current queue position, counter, status, and notification message
+- Submit feedback after completion
+
+7. Manager monitors operations
+- View queue statistics
+- View active counters
+- Identify possible bottlenecks from live counter activity
+
+8. Admin manages the system
+- Create, update, delete users
+- Assign roles
+- Create, update, delete counters
+- View full system data and analytics
+
+==================================================
+7. FRONTEND SERVICE FUNCTIONS SUMMARY
+==================================================
+
+FILE: frontend/src/services/authService.js
+
+login(credentials)
+- Logs in an existing user
+
+register(data)
+- Registers a new customer account
+
+logout()
+- Removes JWT token from local storage
+
+
+FILE: frontend/src/services/tokenService.js
+
+generateToken(data)
+- Creates a new token
+
+getMyTokens(customerId)
+- Gets all tokens for one customer
+
+getTokenStatus(num)
+- Gets token details by token number
+
+getQueue()
+- Gets ordered waiting queue
+
+callNext(cId)
+- Calls next token for selected counter
+
+updateStatus(id, status)
+- Updates token lifecycle state
+
+skipToken(id)
+- Marks token as skipped
+
+submitFeedback(data)
+- Intended for feedback submission
+- Note: full backend feedback flow is not fully implemented yet
+
+
+FILE: frontend/src/services/reportService.js
+
+getQueueStats()
+- Gets queue statistics summary
+
+getAllUsers()
+- Gets all users
+
+getCounters()
+- Gets all counters
+
+==================================================
+7. BACKEND CONTROLLER FUNCTIONS SUMMARY
+==================================================
+
+AuthController
+- /api/auth/login
+- /api/auth/register/customer
+- /api/auth/test
+
+TokenController
+- /api/tokens/generate
+- /api/tokens/my
+- /api/tokens/queue
+- /api/tokens/status/{tokenNumber}
+- /api/tokens/call-next/{counterId}
+- /api/tokens/{id}/status
+- /api/tokens/{id}/skip
+
+ReportController
+- /api/reports/queue-stats
+
+CounterController
+- /api/counters
+
+UserController
+- /api/users
+
+==================================================
+8. HOW TO USE THE SYSTEM STEP BY STEP
+==================================================
+
+STEP 1
+Start PostgreSQL and make sure the database exists.
+
+STEP 2
+Run backend:
+cd backend
+mvn.cmd spring-boot:run
+
+STEP 3
+Run frontend:
+cd frontend
+npm.cmd install
+npm.cmd run dev
+
+STEP 4
+Open:
+http://localhost:5173
+
+STEP 5
+Either:
+- sign in with an existing account
+or
+- create a new customer account with any valid email
+
+STEP 6
+Use role-based dashboards:
+- Customer generates tokens
+- Operator serves tokens
+- Manager monitors queue
+- Admin monitors system data
+
+==================================================
+9. IMPORTANT NOTES
+==================================================
+
+- New email IDs work by customer registration first.
+- Unknown email IDs cannot log in unless an account exists.
+- Demo accounts are optional now, not mandatory.
+- Backend role protection is still not fully enforced for all APIs.
+- Feedback and notification features are not fully completed yet.
+
+END OF GUIDE
