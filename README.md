@@ -301,4 +301,3 @@ This project now supports the complete core workflow of a digital queue system:
 - admin user and counter management
 - customer feedback after service completion
 
-It is a solid working academic project with a complete multi-role queue workflow and a clear path for future production-style improvements.
